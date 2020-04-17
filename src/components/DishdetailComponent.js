@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card, CardImg, CardText, CardBody, CardTitle } from "reactstrap";
 
-class Dishdetail extends Component {
-  renderDish(dish) {
+
+  function RenderDish({dish}) {
     if (dish != null)
       return (
         <div className="col-12 col-md-5 m-1">
@@ -18,7 +18,8 @@ class Dishdetail extends Component {
     else return <div></div>;
   }
 
-  renderComments(comments) {
+  function RenderComments({comments}) {
+    console.log("comments" + comments);
     if (comments != null) {
       let comms = comments.map((comm, i) => {
         let date = new Intl.DateTimeFormat("en-US", {
@@ -48,14 +49,13 @@ class Dishdetail extends Component {
     }
   }
 
-  render() {
-    const { selectedDish } = this.props;
-    if (selectedDish != null) {
+  const  Dishdetail = (props) => {
+    if (props.dish != null) {
       return (
         <div className="container">
           <div className="row">
-            {this.renderDish(selectedDish)}
-            {this.renderComments(selectedDish.comments)}
+              <RenderDish dish={props.dish} />
+              <RenderComments comments={props.comments} />
           </div>
         </div>
       );
@@ -63,6 +63,6 @@ class Dishdetail extends Component {
       return <div></div>;
     }
   }
-}
+
 
 export default Dishdetail;
