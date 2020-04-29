@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
   Button,
   Form,
   FormGroup,
+  FormFeedback,
   Label,
   Input,
   Col,
@@ -15,13 +14,19 @@ class Contact extends Component {
     super(props);
 
     this.state = {
-      firstname: "",
-      lastname: "",
-      telnum: "",
-      email: "",
+      firstname: '',
+      lastname: '',
+      telnum: '',
+      email: '',
       agree: false,
       contactType: "Tel.",
       message: "",
+      touched:{
+        firstname:false,
+        lastname:false,
+        telnum:false,
+        email:false
+      }
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -44,7 +49,31 @@ class Contact extends Component {
     event.preventDefault();
   }
 
+  handleBlur = (field) =>(evt) =>{
+    this.setState({
+      touched:{...this.setState.touched, [field]:true }
+    })
+  }
+
+  validate(firstname, lastname, telnum, email){
+    const errors={
+      firstname:'',
+      lastname:'',
+      telnum:'',
+      email:''
+    };
+
+    if(this.state.touched.firstname && firstname.length < 3)
+    {
+      errors.firstname = 'First name should be greater than 3 characters';
+    }
+    return errors;
+
+  }
+
   render() {
+
+    const errors = this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email);
     return (
       <div className="container">
         <div className="row row-content">
@@ -111,8 +140,12 @@ class Contact extends Component {
                     name="firstname"
                     placeholder="First Name"
                     value={this.state.firstname}
+                    valid={errors.firstname === ""}
+                    invalid={errors.firstname !== ""}
+                    onBlur={this.handleBlur("firstname")}
                     onChange={this.handleInputChange}
                   />
+                  <FormFeedback>{errors.firstname}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
